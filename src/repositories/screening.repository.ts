@@ -5,14 +5,16 @@ import { ScreeningByAgeGender } from "../models/screeningByAgeGender.model";
 import { numberScreenedHealthFacilities } from "../models/numberScreenedHealthFacilities.model";
 import { screeningOverTime } from "../models/screeningOverTime.model";
 
-interface IScreeningRepository {
+interface IScreeningRepository 
+{
   retrieveScreeningByGender(): Promise<ScreeningByGender[]>;
   retrieveScreeningByAgeGender(): Promise<ScreeningByAgeGender[]>;
   retrieveScreeningByHealthFacilities(): Promise<numberScreenedHealthFacilities[]>;
   retrieveScreeningOverTime(): Promise<screeningOverTime[]>;
 }
 
-class ScreeningRepository implements IScreeningRepository {
+class ScreeningRepository implements IScreeningRepository 
+{
 
   db = new Database();
   private retrievedScreeningData: any;
@@ -66,6 +68,5 @@ class ScreeningRepository implements IScreeningRepository {
   }
 
 }
-
 
 export default new ScreeningRepository
