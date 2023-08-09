@@ -166,12 +166,12 @@ class OverviewRepository implements IOverviewRepository {
     }
 
     async retrieveNumberEnrolledByFacility(): Promise<NumberEnrolled[]> {
-        let condition = '';
-        condition += 'and SampleTested is not null and barcode is not null Group by Facility';
+        //let condition = '';
+       // condition += 'and SampleTested is not null and barcode is not null Group by Facility';
     
-        const query = `SELECT  newid() as Id, sum( SampleTested) as Enrolled, sum(Covid19Positive) 
-                        Covid19Positive,Facility  from [dbo].[FactMortality] 
-                        Where SampleTested = 1 ${condition};`
+        const query = `SELECT  newid() as Id, sum( enrolled) as Enrolled, sum(Covid19Positive) 
+        Covid19Positive,Facility  from [dbo].[FactMortality_2] 
+        Where enrolled = 1  Group by Facility;`
 
         this.numberEnrolled = await this.db.sequelize?.query<NumberEnrolled[]>(query, {
             type: QueryTypes.SELECT,
@@ -218,11 +218,11 @@ class OverviewRepository implements IOverviewRepository {
 
     async retrieveCovid19Positivity(): Promise<Covid19PositivityRate[]> {
 
-        const query = `SELECT Distinct Covid19Positive, Covid19Negative FROM (
-            select Covid19Positive=(select count(p.Covid19Positive)  from [dbo].[FactMortality] p where Covid19Positive = 1 and SampleTested = 1 and SampleTested is not null and barcode is not null )
-            , Covid19Negative =(select count(N.Covid19Positive)  from [dbo].[FactMortality] N where Covid19Positive = 0 and SampleTested = 1 and SampleTested is not null and barcode is not null)     
-            from [dbo].[FactMortality]  t
-            Where SampleTested = 1 and SampleTested is not null and barcode is not null ) A`
+        const query = `SELECT 		
+		SUM (CASE WHEN Covid19Positive =1 THEN Covid19Positive else 0  END ) Covid19Positive,
+		Count( CASE WHEN Covid19Positive =0 THEN Covid19Positive else 0 END) Covid19Negative
+FROM [dbo].[FactMortality]
+WHere Enrolled = 1`
         this.covidPositivityRate = await this.db.sequelize?.query<Covid19PositivityRate[]>(query, {
             type: QueryTypes.SELECT,
 
@@ -234,7 +234,7 @@ class OverviewRepository implements IOverviewRepository {
     }
     async retrieveCovid19PositivityByGender(): Promise<Covid19PositivityByGender[]> {
 
-        const query = `select count(p.Covid19Positive) As PositiveNumber,
+        const query = `Select count(p.Covid19Positive) As PositiveNumber,
         (SELECT SexValue  FROM [dbo].[DimSex] where SexId = sex) as Gender 
         from [dbo].[FactMortality] p where Covid19Positive = 1 and 
         SampleTested = 1 and SampleTested is not null and barcode is not null

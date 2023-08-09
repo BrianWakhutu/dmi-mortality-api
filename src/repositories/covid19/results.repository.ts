@@ -14,11 +14,11 @@ class ResultsRepository implements IResultsRepository {
     private retrievedData: any;
 
     async retrieveByStatus(): Promise<Covid19Results[]> {
-        const query = `SELECT Distinct Covid19Positive, Covid19Negative FROM (
-            select Covid19Positive=(select count(p.Covid19Positive)  from [dbo].[FactMortality] p where Covid19Positive = 1 and SampleTested = 1 and SampleTested is not null and barcode is not null), 
-            Covid19Negative =(select count(N.Covid19Positive)  from [dbo].[FactMortality] N where Covid19Positive = 0 and SampleTested = 1 and SampleTested is not null and barcode is not null)    
-            from [dbo].[FactMortality]  t
-            Where SampleTested = 1 and SampleTested is not null and barcode is not null ) A`
+        const query = `SELECT 		
+		SUM (CASE WHEN Covid19Positive =1 THEN Covid19Positive else 0  END ) Covid19Positive,
+		Count( CASE WHEN Covid19Positive =0 THEN Covid19Positive else 0 END) Covid19Negative
+FROM [dbo].[FactMortality]
+WHere Enrolled = 1`
 
         this.retrievedData = await this.db.sequelize?.query<Covid19Results[]>(query, {
             type: QueryTypes.SELECT,
@@ -62,14 +62,14 @@ class ResultsRepository implements IResultsRepository {
 
     async retrieveByPositivityOverTime(): Promise<Covid19Results[]> {
         const query = `SELECT 
-        count(SampleTested) SampleTested, 
-        sum(Covid19Positive) Covid19Positive,
-        EpiWeek,
-        (select  [Month] from [dbo].[DimEpiWeek] where WeekKey = P.EpiWeek ) [Month],
-        (select  [Year] from [dbo].[DimEpiWeek] where WeekKey = P.EpiWeek ) [Year]
-        FROM  [dbo].[FactMortality]  p
-        WHERE SampleTested =1 and SampleTested is not null and barcode is not null
-        Group by EpiWeek;`
+count(SampleTested) SampleTested, 
+sum(Covid19Positive) Covid19Positive,
+EpiWeek,
+(select  [Month] from [dbo].[DimEpiWeek] where WeekKey = P.EpiWeek ) [Month],
+(select  [Year] from [dbo].[DimEpiWeek] where WeekKey = P.EpiWeek ) [Year]
+FROM  [dbo].[FactMortality_2]  p
+WHERE SampleTested =1 and SampleTested is not null and barcode is not null
+Group by EpiWeek;`
 
         this.retrievedData = await this.db.sequelize?.query<Covid19Results[]>(query, {
             type: QueryTypes.SELECT,
