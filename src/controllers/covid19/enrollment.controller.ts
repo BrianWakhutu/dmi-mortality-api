@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import enrollmentRepository from "../repositories/enrollment.repository"
+import enrollmentRepository from "../../repositories/covid19/enrollment.repository"
 
 export default class EnrollmentController {
-    async findEnrollmentByGender(req: Request, res: Response) {
+    async findByGender(req: Request, res: Response) {
         try {
-            const numEnrolledByGender = await enrollmentRepository.retrieveEnrollmentByGender();
+            const numEnrolledByGender = await enrollmentRepository.retrieveByGender();
             res.status(201).send(numEnrolledByGender);
         }
         catch (err) {
@@ -14,9 +14,9 @@ export default class EnrollmentController {
         }
     }
 
-    async findEnrollmentByAgeGender(req: Request, res: Response) {
+    async findByAgeGender(req: Request, res: Response) {
         try {
-            const numEnrolledByAgeGender = await enrollmentRepository.retrieveEnrollmentByAgeGender();
+            const numEnrolledByAgeGender = await enrollmentRepository.retrieveByAgeGender();
             res.status(201).send(numEnrolledByAgeGender);
         }
         catch (err) {
@@ -26,9 +26,9 @@ export default class EnrollmentController {
         }
     }
 
-    async findEnrollmentByFacility(req: Request, res: Response) {
+    async findByFacility(req: Request, res: Response) {
         try {
-            const numEnrolledByFacility = await enrollmentRepository.retrieveEnrollmentByFacility();
+            const numEnrolledByFacility = await enrollmentRepository.retrieveByFacility();
             res.status(201).send(numEnrolledByFacility);
         }
         catch (err) {
@@ -38,9 +38,9 @@ export default class EnrollmentController {
         }
     }
 
-    async findEnrollmentByEpiWeek(req: Request, res: Response) {
+    async findOverTime(req: Request, res: Response) {
         try {
-            const numEnrolledByEpiWeek = await enrollmentRepository.retrieveEnrollmentByEpiWeek();
+            const numEnrolledByEpiWeek = await enrollmentRepository.retrieveOverTime();
             res.status(201).send(numEnrolledByEpiWeek);
         }
         catch (err) {
