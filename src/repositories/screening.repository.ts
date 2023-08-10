@@ -36,7 +36,6 @@ class ScreeningRepository implements IScreeningRepository
       type: QueryTypes.SELECT,
     });
 
-   // console.log(this.retrievedScreeningData);
     return this.retrievedScreeningData;
   }
 
@@ -52,7 +51,6 @@ class ScreeningRepository implements IScreeningRepository
       type: QueryTypes.SELECT,
     });
 
-    //console.log(this.retrievedScreeningByAgeGender);
     return this.retrievedScreeningByAgeGender;
   }
 
@@ -68,7 +66,6 @@ class ScreeningRepository implements IScreeningRepository
       type: QueryTypes.SELECT,
     });
 
-   // console.log(this.retrievedScreeningByHealthFacilities);
     return this.retrievedScreeningByHealthFacilities;
   }
 
