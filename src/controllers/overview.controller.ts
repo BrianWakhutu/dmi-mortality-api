@@ -1,24 +1,11 @@
 import { Request, Response } from "express";
 import overviewRepository from "../repositories/overview.repository"
 
-<<<<<<< HEAD
-
-export default class OverviewController {
-
-    async findNumberEnrolled(req: Request, res: Response) {
-        try{
-
-            const numEnrolledAndPositive = await overviewRepository.retrieveNumberEnrolled();
-
-            res.status(201).send(numEnrolledAndPositive); 
-           
-=======
 export default class OverviewController {
     async findCovid19Summary(req: Request, res: Response) {
         try {
             const numCovid19Summary = await overviewRepository.retrieveCovid19Summary();
             res.status(201).send(numCovid19Summary);
->>>>>>> fc441213c438c1faddcc04925bd2bf0c2443ad65
         }
         catch (err) {
             res.status(500).send({
@@ -116,8 +103,6 @@ export default class OverviewController {
 
         }
     }
-<<<<<<< HEAD
-=======
 
     async findCovid19PositivityByAgeGender(req: Request, res: Response) {
         try {
@@ -163,5 +148,4 @@ export default class OverviewController {
 
         }
     }
->>>>>>> fc441213c438c1faddcc04925bd2bf0c2443ad65
 }
